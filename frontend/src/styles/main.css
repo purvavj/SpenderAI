@@ -1,0 +1,394 @@
+/* Base Styles */
+:root {
+  --primary-bg: #22222c;
+  --secondary-bg: #1e1f1b;
+  --card-bg-grad: linear-gradient(145deg, #1a1b1e 0%, #202125 100%);
+  --accent-color: #ff7f50;
+  --text-primary: #ffffff;
+  --text-secondary: #bbbbbb;
+  --muted: #2a2b30;
+  --card-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  --border-radius: 14px;
+  --transition: all 0.25s ease;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* App container */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  background: var(--secondary-bg);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Centered title with right profile */
+.nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 1.9rem;
+  letter-spacing: 0.5px;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.nav-profile {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.profile-name {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid #3a3b40;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: 100%; /* Position below the profile */
+  right: 10;
+  background: var(--secondary-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  min-width: 160px;
+  z-index: 200;
+  overflow: hidden;
+  margin-top: 8px; /* Space from profile */
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+  background: #990f24;
+}
+
+/* Dashboard shell */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+}
+
+/* Month/Year controls (right aligned under nav) */
+.dashboard-header-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 54px 24px 0 24px;
+}
+
+.month-year-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.month-year-selector select {
+  appearance: none;
+  background: #232428;
+  color: var(--text-primary);
+  border: 1px solid #3a3b40;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  outline: none;
+}
+
+.month-year-selector select:hover {
+  border-color: var(--accent-color);
+}
+
+.month-year-selector select:focus {
+  box-shadow: 0 0 0 3px rgba(255,127,80,0.2);
+  border-color: var(--accent-color);
+}
+
+/* Main content area */
+.dashboard-content {
+  width: 100%;
+  max-width: 1280px;
+  margin: 16px auto 32px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* left: chart, right: table */
+  gap: 22px;
+  flex: 1;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg-grad);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 22px;
+}
+
+/* Left panel (Pie card) */
+.left-section.card {
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.chart-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-title {
+  margin: 0 0 16px 0;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.pie-chart-placeholder {
+  flex: 1;
+  min-height: 340px;
+  border-radius: 12px;
+  background: radial-gradient(1200px 600px at 20% 0%, #1c1d21 0%, #17181b 60%, #141519 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a8c96;
+  font-size: 1.1rem;
+}
+
+/* Right panel (Transactions) */
+.right-section.card {
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-title {
+  margin: 0 0 14px 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Add Transaction Form */
+.add-transaction-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  padding-bottom: 14px;
+  margin-bottom: 10px;
+  border-bottom: 4px solid #2b2c31;
+}
+
+.add-transaction-form input,
+.add-transaction-form select {
+  background: #232428;
+  color: var(--text-primary);
+  border: 1px solid #3a3b40;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.add-transaction-form input:focus,
+.add-transaction-form select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(255,127,80,0.2);
+}
+
+.add-transaction-form button {
+  background: var(--accent-color);
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.add-transaction-form button:hover {
+  filter: brightness(0.95);
+}
+
+/* Table wrapper with custom scroll */
+.table-wrapper {
+  flex: 1;
+  overflow: auto;
+  margin-top: 8px;
+  border-radius: 10px;
+}
+
+/* Scrollbar */
+.table-wrapper::-webkit-scrollbar { width: 10px; height: 10px; }
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 6px;
+}
+.table-wrapper { scrollbar-color: var(--accent-color) transparent; scrollbar-width: thin; }
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #1f2024;
+  z-index: 1;
+  padding: 12px 10px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  border-bottom: 1px solid #34353b;
+}
+
+tbody td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #34353b;
+}
+
+tbody tr:hover {
+  background: #232429;
+}
+
+tfoot td {
+  padding: 12px 10px;
+  font-weight: 700;
+  border-top: 2px solid rgba(255,127,80,0.2);
+}
+
+th:nth-child(2), td:nth-child(2) {
+  text-align: center;
+}
+
+th:nth-child(3), td:nth-child(3) {
+  text-align: center;
+}
+
+th:nth-child(4), td:nth-child(4) {
+  text-align: center;
+}
+
+/* Category badges (map to your categories) */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-block;
+  letter-spacing: 0.2px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.badge.shopping { background: rgba(76, 175, 80, 0.2); color: #7ee084; border-color: rgba(76,175,80,0.4); }
+.badge.bills { background: rgba(33, 150, 243, 0.15); color: #6ec0ff; border-color: rgba(33,150,243,0.35); }
+.badge.eating-out { background: rgba(244, 67, 54, 0.15); color: #ffa3a3; border-color: rgba(244,67,54,0.35); }
+.badge.others { background: rgba(255, 152, 0, 0.15); color: #ffc477; border-color: rgba(255,152,0,0.35); }
+
+/* Login */
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  text-align: center;
+  width: 100%;
+  max-width: 420px;
+  background: var(--card-bg-grad);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 32px 26px;
+}
+
+.google-btn {
+  background: #4285F4;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 20px;
+}
+
+.google-btn:hover { background: #366ed1; }
+
+/* Recharts tweaks (optional) */
+.recharts-legend-item-text { color: var(--text-secondary) !important; }
+.recharts-default-legend {
+  background: transparent !important;
+  padding-left: 8px;
+}
+
+/* Responsive (kept desktop-first; stack at narrower widths) */
+@media (max-width: 1024px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+  .left-section.card, .right-section.card {
+    min-height: auto;
+  }
+}
