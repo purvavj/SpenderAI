@@ -1,0 +1,24 @@
+.chart-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-title {
+  margin: 0 0 16px 0;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.pie-chart-placeholder {
+  flex: 1;
+  min-height: 340px;
+  border-radius: 12px;
+  background: radial-gradient(1200px 600px at 20% 0%, #1c1d21 0%, #17181b 60%, #141519 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a8c96;
+  font-size: 1.1rem;
+}

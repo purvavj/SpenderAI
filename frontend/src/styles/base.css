@@ -1,0 +1,27 @@
+:root {
+  --primary-bg: #22222c;
+  --secondary-bg: #1e1f1b;
+  --card-bg-grad: linear-gradient(145deg, #1a1b1e 0%, #202125 100%);
+  --accent-color: #ff7f50;
+  --text-primary: #ffffff;
+  --text-secondary: #bbbbbb;
+  --muted: #2a2b30;
+  --card-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  --border-radius: 14px;
+  --transition: all 0.25s ease;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

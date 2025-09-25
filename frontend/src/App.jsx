@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import LoginButton from './components/LoginButton';
 import Dashboard from './components/Dashboard';
-import './styles/main.css';
+import './styles/App.css';
+import './styles/base.css';
 
 function App() {
   // load saved user (if any)

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../styles/TransactionTable.css';
 
 // Changed prop name from selectedMonth to month
 function TransactionTable({ month, userId }) {

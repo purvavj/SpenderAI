@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
+import '../styles/PieChart.css';
 
 // Modern color palette
 const COLORS = ['#54a5d7ff', '#C4B4E6', '#FFDC73', '#FF7878', '#A0D8B4', '#8B80C8'];

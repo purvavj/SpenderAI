@@ -1,0 +1,128 @@
+.table-container {
+  background: var(--secondary-bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+/* Add Transaction Form */
+.add-transaction-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  padding-bottom: 14px;
+  margin-bottom: 10px;
+  border-bottom: 4px solid #2b2c31;
+}
+
+.add-transaction-form input,
+.add-transaction-form select {
+  background: #232428;
+  color: var(--text-primary);
+  border: 1px solid #3a3b40;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.add-transaction-form input:focus,
+.add-transaction-form select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(255,127,80,0.2);
+}
+
+.add-transaction-form button {
+  background: var(--accent-color);
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.add-transaction-form button:hover {
+  filter: brightness(0.95);
+}
+
+/* Table wrapper with custom scroll */
+.table-wrapper {
+  flex: 1;
+  overflow: auto;
+  margin-top: 8px;
+  border-radius: 10px;
+}
+
+/* Scrollbar */
+.table-wrapper::-webkit-scrollbar { width: 10px; height: 10px; }
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 6px;
+}
+.table-wrapper { scrollbar-color: var(--accent-color) transparent; scrollbar-width: thin; }
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: #1f2024;
+  z-index: 1;
+  padding: 12px 10px;
+  color: var(--text-secondary);
+  font-weight: 700;
+  border-bottom: 1px solid #34353b;
+}
+
+tbody td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #34353b;
+}
+
+tbody tr:hover {
+  background: #232429;
+}
+
+tfoot td {
+  padding: 12px 10px;
+  font-weight: 700;
+  border-top: 2px solid rgba(255,127,80,0.2);
+}
+
+th:nth-child(2), td:nth-child(2) {
+  text-align: center;
+}
+
+th:nth-child(3), td:nth-child(3) {
+  text-align: center;
+}
+
+th:nth-child(4), td:nth-child(4) {
+  text-align: center;
+}
+
+/* Category badges (map to your categories) */
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-block;
+  letter-spacing: 0.2px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.badge.shopping { background: rgba(76, 175, 80, 0.2); color: #7ee084; border-color: rgba(76,175,80,0.4); }
+.badge.bills { background: rgba(33, 150, 243, 0.15); color: #6ec0ff; border-color: rgba(33,150,243,0.35); }
+.badge.eating-out { background: rgba(244, 67, 54, 0.15); color: #ffa3a3; border-color: rgba(244,67,54,0.35); }
+.badge.others { background: rgba(255, 152, 0, 0.15); color: #ffc477; border-color: rgba(255,152,0,0.35); }

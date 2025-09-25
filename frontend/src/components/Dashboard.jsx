@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'; // Add useRef and useEffect for outside click handling
 import TransactionTable from './TransactionTable';
 import PieChartComponent from './PieChartComponent';
+import '../styles/Dashboard.css';
+import '../styles/Navbar.css';
 
 function Dashboard({ user, setIsLoggedIn }) {
   const today = new Date();

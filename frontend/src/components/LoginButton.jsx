@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
+import '../styles/LoginPage.css';
 
 function LoginButton({ setUser, setIsLoggedIn }) {
   const login = useGoogleLogin({
