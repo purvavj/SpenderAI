@@ -41,4 +41,4 @@ class CategorySpending(BaseModel):
 class DashboardResponse(BaseModel):
     total_spent: float
     category_breakdown: List[CategorySpending]
-    transactions: List[TransactionResponse]
+    # transactions: List[TransactionResponse]
