@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'; // Add useRef and useEffect for outside click handling
 import TransactionTable from './TransactionTable';
-import PieChart from './PieChart';
+import PieChartComponent from './PieChartComponent';
 
 function Dashboard({ user, setIsLoggedIn }) {
   const today = new Date();
@@ -90,7 +90,7 @@ function Dashboard({ user, setIsLoggedIn }) {
         <div className="left-section card">
           <div className="chart-container">
             <h3 className="chart-title">Spending by Category for {months.find(m => m.value === selectedMonth)?.label} {selectedYear}</h3>
-            <PieChart month={formattedMonth} userId={user.id} />
+            <PieChartComponent month={formattedMonth} userId={user.id} />
           </div>
         </div>
 
