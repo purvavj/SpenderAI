@@ -6,6 +6,7 @@ from models import User, Transaction
 from sqlalchemy.orm import Session
 from datetime import date
 from typing import List
+from collections import defaultdict 
 
 # Import schemas from the new file
 from schemas import (
@@ -96,7 +97,7 @@ async def auth_google(auth_request: GoogleAuthRequest, db: Session = Depends(get
         raise HTTPException(status_code=401, detail=str(e))
 
 # Dashboard endpoint - Pie chart data
-@app.get("/api/dashboard/{user_id}")
+@app.get("/api/dashboard")
 async def get_dashboard_data(
     user_id: int,
     month: str,  # Format: YYYY-MM
@@ -134,8 +135,8 @@ async def get_dashboard_data(
     
     return {
         "total_spent": total_spent,
-        "category_breakdown": category_breakdown,
-        "transactions": transactions
+        "category_breakdown": category_breakdown
+        # "transactions": transactions
     }
 
 # Update the existing get_transactions endpoint to use query parameters
