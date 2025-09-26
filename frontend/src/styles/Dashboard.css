@@ -1,7 +1,8 @@
 .dashboard {
-  display: flex;
+  display: fill;
   flex-direction: column;
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
+  background: url("/dashboard-bg.jpg");
 }
 
 .dashboard-header-controls {
@@ -17,7 +18,7 @@
 }
 
 .month-year-selector select {
-  appearance: none;
+  height: 44px;
   background: #232428;
   color: var(--text-primary);
   border: 1px solid #3a3b40;
@@ -62,6 +63,11 @@
   justify-content: stretch;
 }
 
+.chart-title{
+  color: black;
+  text-align: center;
+}
+
 .right-section.card {
   min-height: 460px;
   display: flex;
@@ -70,5 +76,5 @@
 
 .table-title {
     margin-bottom: 20px;
-    color: var(--text-primary);
+    color: black;
 }

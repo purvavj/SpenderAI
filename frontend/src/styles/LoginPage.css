@@ -15,9 +15,9 @@
   box-shadow: 0 12px 28px rgba(0,0,0,0.55);
 }
 .google-btn {
-  background: #42f451; color: #040404; padding: 12px 20px;
+  background: #3d060d; color: #ffffff; padding: 12px 20px;
   border: none; border-radius: 10px; width: 90%;
   font-size: 1rem; 
   cursor: pointer; transition: 0.25s;
 }
-.google-btn:hover { background: #38bf4a; }
+.google-btn:hover { background: #3c8244; }

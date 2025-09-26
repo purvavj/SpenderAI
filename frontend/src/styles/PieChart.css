@@ -1,24 +1,66 @@
+/* ensure chart container is positioned */
 .chart-container {
-  flex: 1;
+  position: relative; /* required for center label absolute positioning */
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--secondary-bg);
+  border-radius: var(--border-radius);
+  padding: 10px;
 }
 
-.chart-title {
-  margin: 0 0 16px 0;
-  color: var(--text-secondary);
-  font-weight: 600;
-  letter-spacing: 0.3px;
+/* Center label (appears in donut hole on hover) */
+.pie-center-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none; /* don't block mouse events to the chart */
+  text-align: center;
+  color: #000000;
+  z-index: 50;
+  line-height: 1;
 }
 
+.pie-center-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #000000;
+}
+
+.pie-center-name {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.pie-center-percent {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+/* slight shadow on svg for depth */
+.chart-container svg {
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45));
+}
+
+/* keep existing placeholder and total styles (if not present) */
 .pie-chart-placeholder {
   flex: 1;
   min-height: 340px;
   border-radius: 12px;
-  background: radial-gradient(1200px 600px at 20% 0%, #1c1d21 0%, #17181b 60%, #141519 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #8a8c96;
   font-size: 1.1rem;
+}
+.chart-total {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #000000;
 }

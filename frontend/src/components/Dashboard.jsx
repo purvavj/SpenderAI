@@ -13,7 +13,8 @@ function Dashboard({ user, setIsLoggedIn }) {
 
   const handleLogout = () => {
     setShowDropdown(false); // Close dropdown
-    setIsLoggedIn(false); // Log out
+    localStorage.removeItem('spender_user');
+    setIsLoggedIn(false);
   };
 
   // Close dropdown if clicking outside

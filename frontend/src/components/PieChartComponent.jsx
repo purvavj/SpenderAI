@@ -3,32 +3,16 @@ import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import '../styles/PieChart.css';
 
-// Modern color palette
-const COLORS = ['#54a5d7ff', '#C4B4E6', '#FFDC73', '#FF7878', '#A0D8B4', '#8B80C8'];
+const COLORS = ['#ff9292ff', '#e6a157', '#f0e1d4ff', '#FF7F7F', '#A91101', '#0d97baa7'];
 
-// Custom label (value + % outside the ring)
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, percent, index }) => {
-  if (!value || value <= 0) return null;
-  const RADIAN = Math.PI / 180;
-  const outerX = cx + (outerRadius + 30) * Math.cos(-midAngle * RADIAN);
-  const outerY = cy + (outerRadius + 30) * Math.sin(-midAngle * RADIAN);
-  const textAnchor = outerX > cx ? 'start' : 'end';
-
-  return (
-    <g>
-      <text x={outerX} y={outerY} fill={COLORS[index % COLORS.length]} textAnchor={textAnchor} dominantBaseline="central" fontSize="14">
-        {value}
-      </text>
-      <text x={outerX} y={outerY + 20} fill={COLORS[index % COLORS.length]} textAnchor={textAnchor} fontSize="12" opacity="0.8">
-        {(percent * 100).toFixed(0)}%
-      </text>
-    </g>
-  );
+  return null;
 };
 
-function PieChartComponent({ month, userId }) {
+export default function PieChartComponent({ month, userId }) {
   const [loading, setLoading] = useState(true);
   const [breakdown, setBreakdown] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(null); // hovered slice
 
   useEffect(() => {
     if (!userId || !month) return;
@@ -59,50 +43,57 @@ function PieChartComponent({ month, userId }) {
   const total = chartData.reduce((sum, e) => sum + (e.value || 0), 0);
 
   return (
-    <div className="chart-container" style={{ width: '100%', height: '300px' }}>
+    <div className="chart-container" style={{ width: '100%', height: '340px', position: 'relative' }}>
       <ResponsiveContainer>
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={65}
-            outerRadius={95}
+            innerRadius={70}
+            outerRadius={100}
             paddingAngle={2}
-            cornerRadius={10}
+            cornerRadius={8}
             dataKey="value"
             labelLine={false}
             label={renderCustomizedLabel}
-            isAnimationActive={false}
+            onMouseEnter={(_, index) => setActiveIndex(index)}
+            onMouseLeave={() => setActiveIndex(null)}
           >
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
-                stroke="#202030"
+                stroke="rgba(202, 199, 131, 1)"
                 strokeWidth={1}
               />
             ))}
           </Pie>
+
           <Legend
             layout="horizontal"
             align="center"
             verticalAlign="top"
-            wrapperStyle={{ paddingTop: '10px' }}
+            wrapperStyle={{ paddingTop: '8px' }}
             iconType="circle"
             formatter={(value) => {
               const i = chartData.findIndex(item => item.name === value);
-              return <span style={{ color: COLORS[i % COLORS.length] || '#ccc', fontWeight: 500 }}>{value}</span>;
+              return <span style={{ color: COLORS[i % COLORS.length] || '#000', fontWeight: 600 }}>{value}</span>;
             }}
           />
         </PieChart>
       </ResponsiveContainer>
 
-      <div className="chart-total" style={{ textAlign: 'center', marginTop: 20, fontSize: '1.1rem', fontWeight: 600, color: '#e0e0e0' }}>
-        Total: ${total.toFixed(2)}
-      </div>
+      {/* Center hover label (keep this section) */}
+      {activeIndex !== null && chartData[activeIndex] && (
+        <div className="pie-center-label">
+          <div className="pie-center-value">${(chartData[activeIndex].value || 0).toFixed(2)}</div>
+          <div className="pie-center-name">{chartData[activeIndex].name}</div>
+          <div className="pie-center-percent">{total ? `${Math.round((chartData[activeIndex].value / total) * 100)}%` : ''}</div>
+        </div>
+      )}
+
+      <div className="chart-total">Total: ${total.toFixed(2)}</div>
     </div>
   );
 }
-
-export default PieChartComponent;

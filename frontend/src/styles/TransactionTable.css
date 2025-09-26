@@ -1,5 +1,7 @@
+/* Main container with the semi-transparent "frosted glass" effect */
 .table-container {
-  background: var(--secondary-bg);
+  background: rgb(184, 240, 0.17); /* Semi-transparent background (75% opacity) */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border to define the edge */
   border-radius: var(--border-radius);
   padding: 20px;
   box-shadow: var(--card-shadow);
@@ -7,21 +9,22 @@
   display: flex;
   flex-direction: column;
 }
-/* Add Transaction Form */
+
+/* Form for adding new transactions */
 .add-transaction-form {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr auto;
   gap: 10px;
   padding-bottom: 14px;
   margin-bottom: 10px;
-  border-bottom: 4px solid #2b2c31;
+  border-bottom: 1px solid #2b2c31;
 }
 
 .add-transaction-form input,
 .add-transaction-form select {
-  background: #232428;
-  color: var(--text-primary);
-  border: 1px solid #3a3b40;
+  background: #2324281d;
+  color: black;
+  border: 2px solid #3a3b40;
   border-radius: 10px;
   padding: 10px 12px;
   outline: none;
@@ -31,7 +34,7 @@
 .add-transaction-form input:focus,
 .add-transaction-form select:focus {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(255,127,80,0.2);
+  box-shadow: 0 0 0 3px rgba(255, 127, 80, 0.2);
 }
 
 .add-transaction-form button {
@@ -49,69 +52,72 @@
   filter: brightness(0.95);
 }
 
-/* Table wrapper with custom scroll */
+/* Wrapper to enable scrolling for the table body */
 .table-wrapper {
-  flex: 1;
-  overflow: auto;
+  flex: 1; /* Takes up remaining vertical space */
+  overflow-y: auto; /* Enables vertical scrolling when content overflows */
   margin-top: 8px;
-  border-radius: 10px;
 }
 
-/* Scrollbar */
-.table-wrapper::-webkit-scrollbar { width: 10px; height: 10px; }
+/* Custom scrollbar styling */
+.table-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
 .table-wrapper::-webkit-scrollbar-thumb {
   background-color: var(--accent-color);
   border-radius: 6px;
 }
-.table-wrapper { scrollbar-color: var(--accent-color) transparent; scrollbar-width: thin; }
+.table-wrapper {
+  scrollbar-color: var(--accent-color) transparent;
+  scrollbar-width: thin;
+}
 
-/* Table */
+/* Core table styling */
 table {
   width: 100%;
   border-collapse: collapse;
-  color: var(--text-primary);
+  color: black;
   font-size: 0.95rem;
 }
 
+/* Table Header (Kept solid for readability) */
 thead th {
-  position: sticky;
+  position: sticky; /* Sticks to the top on scroll */
   top: 0;
-  background: #1f2024;
+  background: #1c1c1c; /* Solid background is necessary for sticky headers */
   z-index: 1;
   padding: 12px 10px;
   color: var(--text-secondary);
   font-weight: 700;
   border-bottom: 1px solid #34353b;
+  text-align: left; /* Default alignment */
 }
 
+/* Table Body and Rows */
 tbody td {
   padding: 12px 10px;
-  border-bottom: 1px solid #34353b;
+  /* border-bottom: 1px solid #34353b; */
 }
 
 tbody tr:hover {
-  background: #232429;
+  background: #ffd0503b;
 }
 
+/* Table Footer */
 tfoot td {
   padding: 12px 10px;
   font-weight: 700;
-  border-top: 2px solid rgba(255,127,80,0.2);
+  border-top: 3px solid rgba(207, 116, 37, 0.637);
 }
 
-th:nth-child(2), td:nth-child(2) {
-  text-align: center;
-}
-
-th:nth-child(3), td:nth-child(3) {
-  text-align: center;
-}
-
+/* Column-specific text alignment */
+th:nth-child(2), td:nth-child(2),
+th:nth-child(3), td:nth-child(3),
 th:nth-child(4), td:nth-child(4) {
   text-align: center;
 }
 
-/* Category badges (map to your categories) */
+/* Category Badges */
 .badge {
   padding: 4px 10px;
   border-radius: 999px;
@@ -119,10 +125,10 @@ th:nth-child(4), td:nth-child(4) {
   font-weight: 700;
   display: inline-block;
   letter-spacing: 0.2px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.badge.shopping { background: rgba(76, 175, 80, 0.2); color: #7ee084; border-color: rgba(76,175,80,0.4); }
-.badge.bills { background: rgba(33, 150, 243, 0.15); color: #6ec0ff; border-color: rgba(33,150,243,0.35); }
-.badge.eating-out { background: rgba(244, 67, 54, 0.15); color: #ffa3a3; border-color: rgba(244,67,54,0.35); }
-.badge.others { background: rgba(255, 152, 0, 0.15); color: #ffc477; border-color: rgba(255,152,0,0.35); }
+.badge.shopping { background: rgba(76, 175, 79, 0.394); color: #7ee084; border-color: rgb(11, 141, 16); }
+.badge.bills { background: rgba(33, 149, 243, 0.443); color: #a6d3f5; border-color: rgba(33, 149, 243, 0.782); }
+.badge.eating-out { background: rgba(244, 67, 54, 0.223); color: #d34545; border-color: rgba(244, 67, 54, 0.851); }
+.badge.others { background: rgba(255, 152, 0, 0.15); color: #ffc477; border-color: rgba(255, 152, 0, 0.35); }

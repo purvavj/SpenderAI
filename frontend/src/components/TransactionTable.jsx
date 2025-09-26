@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/TransactionTable.css';
 
-// Changed prop name from selectedMonth to month
 function TransactionTable({ month, userId }) {
   const [transactions, setTransactions] = useState([]);
   const [newTransaction, setNewTransaction] = useState({
@@ -12,24 +11,34 @@ function TransactionTable({ month, userId }) {
     date: new Date().toISOString().split('T')[0]
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const categories = ['Shopping', 'Bills', 'Eating Out', 'Others'];
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}` // Use 'month'
+          `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
         );
         setTransactions(response.data);
       } catch (error) {
         console.error('Error fetching transactions:', error);
+        setError('Failed to fetch transactions');
+      } finally {
+        setLoading(false);
       }
     };
     fetchTransactions();
-  }, [month, userId]); // Dependency on 'month'
+  }, [month, userId]);
 
   const handleAddTransaction = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}`,
@@ -43,7 +52,7 @@ function TransactionTable({ month, userId }) {
 
       // Refresh transactions for the current month
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}` // Use 'month'
+        `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
       );
       setTransactions(response.data);
 
@@ -56,11 +65,21 @@ function TransactionTable({ month, userId }) {
       });
     } catch (error) {
       console.error('Error adding transaction:', error);
-      alert('Failed to add transaction');
+      setError('Failed to add transaction');
+    } finally {
+      setLoading(false);
     }
   };
 
   const totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
+
+  if (loading) {
+    return <div className="table-wrapper">Loading transactions...</div>;
+  }
+
+  if (error) {
+    return <div className="table-wrapper">{error}</div>;
+  }
 
   return (
     <div className="table-wrapper">
