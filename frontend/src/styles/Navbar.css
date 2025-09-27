@@ -3,7 +3,7 @@
   top: 0;
   z-index: 100;
   height: 64px;
-  background: #5445059c;
+  background: #ffffff39;
   box-shadow: var(--card-shadow);
   padding: 0 50px;
   display: flex;
@@ -33,7 +33,7 @@
 }
 
 .profile-name {
-  color: black;
+  color: rgb(255, 255, 255);
   font-weight: 500;
   font-size: 0.92rem;
 }
@@ -50,7 +50,7 @@
   position: absolute;
   top: 100%; 
   right: 10;
-  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  background: #ffffff74;
   box-shadow: var(--card-shadow);
   border-radius: 0 0  var(--border-radius) var(--border-radius);
   min-width: 160px;
@@ -64,7 +64,7 @@
   padding: 12px 16px;
   background: transparent;
   border: none;
-  color: black;
+  color: white;
   text-align: center;
   cursor: pointer;
   transition: var(--transition);
@@ -72,5 +72,6 @@
 }
 
 .dropdown-item:hover {
-  background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+  background-image: linear-gradient(to top, #d8214f 0%, #ffb199 100%);
+  color: white;
 }

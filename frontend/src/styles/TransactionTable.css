@@ -1,6 +1,5 @@
 /* Main container with the semi-transparent "frosted glass" effect */
 .table-container {
-  background: rgb(184, 240, 0.17); /* Semi-transparent background (75% opacity) */
   border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border to define the edge */
   border-radius: var(--border-radius);
   padding: 20px;
@@ -22,8 +21,8 @@
 
 .add-transaction-form input,
 .add-transaction-form select {
-  background: #2324281d;
-  color: black;
+  background: #282727;
+  color: rgb(255, 255, 255);
   border: 2px solid #3a3b40;
   border-radius: 10px;
   padding: 10px 12px;
@@ -54,8 +53,8 @@
 
 /* Wrapper to enable scrolling for the table body */
 .table-wrapper {
-  flex: 1; /* Takes up remaining vertical space */
-  overflow-y: auto; /* Enables vertical scrolling when content overflows */
+  flex: 1; 
+  overflow-y: auto; 
   margin-top: 8px;
 }
 
@@ -82,9 +81,9 @@ table {
 
 /* Table Header (Kept solid for readability) */
 thead th {
-  position: sticky; /* Sticks to the top on scroll */
+  position: sticky; 
   top: 0;
-  background: #1c1c1c; /* Solid background is necessary for sticky headers */
+  background: #1c1c1c;
   z-index: 1;
   padding: 12px 10px;
   color: var(--text-secondary);
@@ -100,14 +99,14 @@ tbody td {
 }
 
 tbody tr:hover {
-  background: #ffd0503b;
+  background: #9592323b;
 }
 
 /* Table Footer */
 tfoot td {
   padding: 12px 10px;
   font-weight: 700;
-  border-top: 3px solid rgba(207, 116, 37, 0.637);
+  border-top: 3px solid rgba(240, 137, 46, 0.637);
 }
 
 /* Column-specific text alignment */

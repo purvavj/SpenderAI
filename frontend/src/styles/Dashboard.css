@@ -2,7 +2,7 @@
   display: fill;
   flex-direction: column;
   min-height: 100vh;
-  background: url("/dashboard-bg.jpg");
+  background: url('/dashboard-bg.jpg');
 }
 
 .dashboard-header-controls {
@@ -50,7 +50,7 @@
 }
 
 .card {
-  background: var(--card-bg-grad);
+  background: rgba(255, 255, 255, 0.439);
   border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
   padding: 22px;
