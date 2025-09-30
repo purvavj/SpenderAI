@@ -14,6 +14,14 @@ function TransactionTable({ month, userId }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({
+    name: '',
+    amount: '',
+    category: '',
+    date: ''
+  });
+
   const categories = ['Shopping', 'Bills', 'Eating Out', 'Others'];
 
   useEffect(() => {
@@ -71,6 +79,45 @@ function TransactionTable({ month, userId }) {
     }
   };
 
+  const handleRowDoubleClick = (transaction) => {
+    setEditingId(transaction.id);
+    setEditData({
+      name: transaction.name,
+      amount: transaction.amount,
+      category: transaction.category,
+      date: transaction.date
+    });
+  };
+
+  const handleSaveEdit = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await axios.patch(
+        `${import.meta.env.VITE_API_URL}/api/transactions/${id}?user_id=${userId}`,
+        {
+          ...editData,
+          amount: parseFloat(editData.amount),
+          user_id: userId // ← Send user_id in the body
+        }
+      );
+      // Refresh transactions
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
+      );
+      setTransactions(response.data);
+      setEditingId(null);
+    } catch (error) {
+      setError('Failed to update transaction');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+const handleCancelEdit = () => {
+  setEditingId(null);
+};
+
   const totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
 
   if (loading) {
@@ -123,22 +170,67 @@ function TransactionTable({ month, userId }) {
             <th>Date</th>
             <th>Category</th>
             <th>Amount</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {transactions.map(transaction => (
-            <tr key={transaction.id}>
-              <td>{transaction.name}</td>
-              <td>{transaction.date}</td>
-              <td>
-                <span className={`badge ${transaction.category.toLowerCase().replace(' ', '-')}`}>
-                  {transaction.category}
-                </span>
-              </td>
-              <td>${transaction.amount.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
+  {transactions.map(transaction =>
+    editingId === transaction.id ? (
+      <tr key={transaction.id}>
+        <td>
+          <input
+            type="text"
+            value={editData.name}
+            onChange={e => setEditData({ ...editData, name: e.target.value })}
+          />
+        </td>
+        <td>
+          <input
+            type="date"
+            value={editData.date}
+            onChange={e => setEditData({ ...editData, date: e.target.value })}
+          />
+        </td>
+        <td>
+          <select
+            value={editData.category}
+            onChange={e => setEditData({ ...editData, category: e.target.value })}
+          >
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </td>
+        <td>
+          <input
+            type="number"
+            step="0.01"
+            value={editData.amount}
+            onChange={e => setEditData({ ...editData, amount: e.target.value })}
+          />
+        </td>
+        <td>
+          <button className="save-btn" onClick={() => handleSaveEdit(transaction.id)}>Save</button>
+          <button className="cancel-btn" onClick={handleCancelEdit}>Cancel</button>
+        </td>
+      </tr>
+    ) : (
+      <tr key={transaction.id} onDoubleClick={() => handleRowDoubleClick(transaction)}>
+        <td>{transaction.name}</td>
+        <td>{transaction.date}</td>
+        <td>
+          <span className={`badge ${transaction.category.toLowerCase().replace(' ', '-')}`}>
+            {transaction.category}
+          </span>
+        </td>
+        <td>${transaction.amount.toFixed(2)}</td>
+        <td style={{ textAlign: 'center', color: '#aaa', fontSize: '0.9em' }}>
+          <span style={{ cursor: 'pointer' }} title="Double-click to edit">✏️</span>
+        </td>
+      </tr>
+    )
+  )}
+</tbody>
         <tfoot>
           <tr>
             <td colSpan="3"><strong>Total</strong></td>

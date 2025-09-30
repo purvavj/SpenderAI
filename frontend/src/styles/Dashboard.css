@@ -2,7 +2,7 @@
   display: fill;
   flex-direction: column;
   min-height: 100vh;
-  background: url('/dashboard-bg.jpg');
+  background: url('/dashboard-bg.jpg') center no-repeat;
 }
 
 .dashboard-header-controls {

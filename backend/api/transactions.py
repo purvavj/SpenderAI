@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from datetime import date
 from typing import List
@@ -35,7 +35,14 @@ async def create_transaction(transaction: TransactionCreate, user_id: int, db: S
     return db_transaction
 
 @router.patch("/transactions/{transaction_id}", response_model=TransactionResponse)
-async def update_transaction(transaction_id: int, transaction: TransactionUpdate, user_id: int, db: Session = Depends(get_db)):
+async def update_transaction(
+    transaction_id: int,
+    transaction: TransactionUpdate,
+    user_id: int = Query(...),
+    db: Session = Depends(get_db)
+):
+    print(f"DEBUG: transaction_id={transaction_id}, user_id={user_id}, transaction={transaction}")
+    
     db_transaction = db.query(Transaction).filter(
         Transaction.id == transaction_id,
         Transaction.user_id == user_id,

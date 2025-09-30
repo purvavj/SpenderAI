@@ -37,8 +37,8 @@
 }
 
 .add-transaction-form button {
-  background: var(--accent-color);
-  color: #111;
+  background: rgba(199, 27, 27, 0.866);
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   padding: 10px 16px;
@@ -99,7 +99,7 @@ tbody td {
 }
 
 tbody tr:hover {
-  background: #9592323b;
+  background: #0303033b;
 }
 
 /* Table Footer */
@@ -129,5 +129,22 @@ th:nth-child(4), td:nth-child(4) {
 
 .badge.shopping { background: rgba(76, 175, 79, 0.394); color: #7ee084; border-color: rgb(11, 141, 16); }
 .badge.bills { background: rgba(33, 149, 243, 0.443); color: #a6d3f5; border-color: rgba(33, 149, 243, 0.782); }
-.badge.eating-out { background: rgba(244, 67, 54, 0.223); color: #d34545; border-color: rgba(244, 67, 54, 0.851); }
-.badge.others { background: rgba(255, 152, 0, 0.15); color: #ffc477; border-color: rgba(255, 152, 0, 0.35); }
+.badge.eating-out { background: rgba(244, 238, 54, 0.223); color: #d3c745; border-color: rgba(244, 225, 54, 0.851); }
+.badge.others { background: rgba(221, 0, 255, 0.15); color: #e877ff; border-color: rgba(208, 0, 255, 0.35); }
+
+.save-btn, .cancel-btn {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-right: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+.cancel-btn {
+  background: #888;
+}
+.save-btn:hover, .cancel-btn:hover {
+  filter: brightness(0.95);
+}
