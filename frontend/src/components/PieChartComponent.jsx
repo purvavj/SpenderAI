@@ -64,7 +64,7 @@ export default function PieChartComponent({ month, userId }) {
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
-                stroke="rgba(202, 199, 131, 1)"
+                stroke="rgba(0, 0, 0, 1)"
                 strokeWidth={1}
               />
             ))}
