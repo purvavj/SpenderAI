@@ -93,14 +93,18 @@ function TransactionTable({ month, userId }) {
     setLoading(true);
     setError(null);
     try {
+      // The payload ONLY contains the editable data.
+      const payload = {
+        ...editData,
+        amount: parseFloat(editData.amount)
+      };
+
+      // The user_id goes in the URL as a query parameter.
       await axios.patch(
         `${import.meta.env.VITE_API_URL}/api/transactions/${id}?user_id=${userId}`,
-        {
-          ...editData,
-          amount: parseFloat(editData.amount),
-          user_id: userId // ← Send user_id in the body
-        }
+        payload // Send the payload without user_id
       );
+
       // Refresh transactions
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
@@ -108,6 +112,10 @@ function TransactionTable({ month, userId }) {
       setTransactions(response.data);
       setEditingId(null);
     } catch (error) {
+      console.error('Error updating transaction:', error);
+      if (error.response) {
+        console.error('Backend validation errors:', error.response.data);
+      }
       setError('Failed to update transaction');
     } finally {
       setLoading(false);

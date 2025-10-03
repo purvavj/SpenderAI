@@ -40,17 +40,18 @@ async def update_transaction(
     transaction: TransactionUpdate,
     user_id: int = Query(...),
     db: Session = Depends(get_db)
-):
-    print(f"DEBUG: transaction_id={transaction_id}, user_id={user_id}, transaction={transaction}")
-    
+):  
     db_transaction = db.query(Transaction).filter(
         Transaction.id == transaction_id,
         Transaction.user_id == user_id,
     ).first()
+
     if not db_transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")
 
-    for field, value in transaction.dict(exclude_unset=True).items():
+    update_data = transaction.dict(exclude_unset=True)
+
+    for field, value in update_data.items():
         setattr(db_transaction, field, value)
 
     db.commit()

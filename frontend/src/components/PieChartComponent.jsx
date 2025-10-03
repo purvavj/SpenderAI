@@ -3,7 +3,7 @@ import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import '../styles/PieChart.css';
 
-const COLORS = ['#ff9292ff', '#e6a157', '#f0e1d4ff', '#FF7F7F', '#A91101', '#0d97baa7'];
+const COLORS = ['#ff9292ff', '#e6a157', '#f0e1d4ff', '#8751abff', '#0d97baa7'];
 
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, percent, index }) => {
   return null;
