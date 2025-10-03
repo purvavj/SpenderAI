@@ -148,3 +148,14 @@ th:nth-child(4), td:nth-child(4) {
 .save-btn:hover, .cancel-btn:hover {
   filter: brightness(0.95);
 }
+
+.actions-cell {
+  display: flex;
+  justify-content: left; 
+  align-items: center;   
+  gap: 14px;           
+}
+
+.delete-btn {
+  margin-left: 10px; 
+}

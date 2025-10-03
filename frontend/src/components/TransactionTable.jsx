@@ -57,14 +57,10 @@ function TransactionTable({ month, userId }) {
           date: newTransaction.date
         }
       );
-
-      // Refresh transactions for the current month
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
       );
       setTransactions(response.data);
-
-      // Reset form
       setNewTransaction({
         name: '',
         amount: '',
@@ -93,19 +89,14 @@ function TransactionTable({ month, userId }) {
     setLoading(true);
     setError(null);
     try {
-      // The payload ONLY contains the editable data.
       const payload = {
         ...editData,
         amount: parseFloat(editData.amount)
       };
-
-      // The user_id goes in the URL as a query parameter.
       await axios.patch(
         `${import.meta.env.VITE_API_URL}/api/transactions/${id}?user_id=${userId}`,
-        payload // Send the payload without user_id
+        payload
       );
-
-      // Refresh transactions
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
       );
@@ -122,9 +113,29 @@ function TransactionTable({ month, userId }) {
     }
   };
 
-const handleCancelEdit = () => {
-  setEditingId(null);
-};
+  const handleCancelEdit = () => {
+    setEditingId(null);
+  };
+
+  // --- NEW: Function to handle deleting a transaction ---
+  const handleDeleteTransaction = async (id) => {
+    // Ask for confirmation before deleting
+    if (!window.confirm('Are you sure you want to delete this transaction?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/transactions/${id}?user_id=${userId}`
+      );
+
+      // Update the state to remove the transaction instantly from the UI
+      setTransactions(transactions.filter(t => t.id !== id));
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+      setError('Failed to delete transaction');
+    }
+  };
 
   const totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
 
@@ -139,6 +150,7 @@ const handleCancelEdit = () => {
   return (
     <div className="table-wrapper">
       <form onSubmit={handleAddTransaction} className="add-transaction-form">
+        {/* ... form inputs are unchanged ... */}
         <input
           type="text"
           placeholder="Transaction name"
@@ -178,70 +190,61 @@ const handleCancelEdit = () => {
             <th>Date</th>
             <th>Category</th>
             <th>Amount</th>
-            <th></th>
+            <th>Actions</th> {/* --- CHANGED: Renamed column header --- */}
           </tr>
         </thead>
         <tbody>
-  {transactions.map(transaction =>
-    editingId === transaction.id ? (
-      <tr key={transaction.id}>
-        <td>
-          <input
-            type="text"
-            value={editData.name}
-            onChange={e => setEditData({ ...editData, name: e.target.value })}
-          />
-        </td>
-        <td>
-          <input
-            type="date"
-            value={editData.date}
-            onChange={e => setEditData({ ...editData, date: e.target.value })}
-          />
-        </td>
-        <td>
-          <select
-            value={editData.category}
-            onChange={e => setEditData({ ...editData, category: e.target.value })}
-          >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-        </td>
-        <td>
-          <input
-            type="number"
-            step="0.01"
-            value={editData.amount}
-            onChange={e => setEditData({ ...editData, amount: e.target.value })}
-          />
-        </td>
-        <td>
-          <button className="save-btn" onClick={() => handleSaveEdit(transaction.id)}>Save</button>
-          <button className="cancel-btn" onClick={handleCancelEdit}>Cancel</button>
-        </td>
-      </tr>
-    ) : (
-      <tr key={transaction.id} onDoubleClick={() => handleRowDoubleClick(transaction)}>
-        <td>{transaction.name}</td>
-        <td>{transaction.date}</td>
-        <td>
-          <span className={`badge ${transaction.category.toLowerCase().replace(' ', '-')}`}>
-            {transaction.category}
-          </span>
-        </td>
-        <td>${transaction.amount.toFixed(2)}</td>
-        <td style={{ textAlign: 'center', color: '#aaa', fontSize: '0.9em' }}>
-          <span style={{ cursor: 'pointer' }} title="Double-click to edit">✏️</span>
-        </td>
-      </tr>
-    )
-  )}
-</tbody>
+          {transactions.map(transaction =>
+            editingId === transaction.id ? (
+              // The editing row is unchanged
+              <tr key={transaction.id}>
+                <td>
+                  <input type="text" value={editData.name} onChange={e => setEditData({ ...editData, name: e.target.value })} />
+                </td>
+                <td>
+                  <input type="date" value={editData.date} onChange={e => setEditData({ ...editData, date: e.target.value })} />
+                </td>
+                <td>
+                  <select value={editData.category} onChange={e => setEditData({ ...editData, category: e.target.value })}>
+                    {categories.map(cat => (<option key={cat} value={cat}>{cat}</option>))}
+                  </select>
+                </td>
+                <td>
+                  <input type="number" step="0.01" value={editData.amount} onChange={e => setEditData({ ...editData, amount: e.target.value })} />
+                </td>
+                <td>
+                  <button className="save-btn" onClick={() => handleSaveEdit(transaction.id)}>Save</button>
+                  <button className="cancel-btn" onClick={handleCancelEdit}>Cancel</button>
+                </td>
+              </tr>
+            ) : (
+              // --- CHANGED: The display row now has a delete button ---
+              <tr key={transaction.id} onDoubleClick={() => handleRowDoubleClick(transaction)}>
+                <td>{transaction.name}</td>
+                <td>{transaction.date}</td>
+                <td>
+                  <span className={`badge ${transaction.category.toLowerCase().replace(' ', '-')}`}>
+                    {transaction.category}
+                  </span>
+                </td>
+                <td>${transaction.amount.toFixed(2)}</td>
+                <td className="actions-cell">
+                  <span className="icon-btn" title="Double-click row to edit">✏️</span>
+                  <span
+                    className="icon-btn delete-btn"
+                    title="Delete transaction"
+                    onClick={() => handleDeleteTransaction(transaction.id)}
+                  >
+                    ❌
+                  </span>
+                </td>
+              </tr>
+            )
+          )}
+        </tbody>
         <tfoot>
           <tr>
-            <td colSpan="3"><strong>Total</strong></td>
+            <td colSpan="4"><strong>Total</strong></td> {/* --- CHANGED: colSpan updated --- */}
             <td><strong>${totalSpent.toFixed(2)}</strong></td>
           </tr>
         </tfoot>

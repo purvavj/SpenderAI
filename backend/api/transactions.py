@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 from datetime import date
 from typing import List
@@ -57,3 +57,26 @@ async def update_transaction(
     db.commit()
     db.refresh(db_transaction)
     return db_transaction
+
+@router.delete("/transactions/{transaction_id}", status_code=204)
+async def delete_transaction(
+    transaction_id: int,
+    user_id: int = Query(...),
+    db: Session = Depends(get_db)
+):
+    # Find the transaction ensuring it belongs to the correct user
+    db_transaction = db.query(Transaction).filter(
+        Transaction.id == transaction_id,
+        Transaction.user_id == user_id
+    ).first()
+
+    # If not found (or doesn't belong to the user), raise a 404
+    if not db_transaction:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    # Delete the transaction from the database
+    db.delete(db_transaction)
+    db.commit()
+
+    # Return a 204 No Content response, which is standard for successful deletions
+    return Response(status_code=204)
