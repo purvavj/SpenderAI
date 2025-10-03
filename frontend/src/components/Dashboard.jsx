@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'; // Add useRef and useEffect for outside click handling
+import React, { useState, useRef, useEffect } from 'react'; 
+import axios from 'axios';
 import TransactionTable from './TransactionTable';
 import PieChartComponent from './PieChartComponent';
 import '../styles/Dashboard.css';
@@ -10,6 +11,11 @@ function Dashboard({ user, setIsLoggedIn }) {
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
   const [showDropdown, setShowDropdown] = useState(false); // State for dropdown visibility
   const dropdownRef = useRef(null); // Ref to detect outside clicks
+
+  const [transactions, setTransactions] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [dataVersion, setDataVersion] = useState(0);
 
   const handleLogout = () => {
     setShowDropdown(false); // Close dropdown
@@ -45,6 +51,36 @@ function Dashboard({ user, setIsLoggedIn }) {
   ];
 
   const formattedMonth = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}`;
+
+  const handleDataChange = () => {
+    setDataVersion(prev => prev + 1);
+  };
+
+  useEffect(() => {
+    if (!user?.id || !formattedMonth) return;
+
+    const fetchAllData = async () => {
+      setLoading(true);
+      try {
+        const [transactionsRes, dashboardRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/api/transactions`, {
+            params: { user_id: user.id, month: formattedMonth }
+          }),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/dashboard`, {
+            params: { user_id: user.id, month: formattedMonth }
+          })
+        ]);
+        setTransactions(transactionsRes.data);
+        setDashboardData(dashboardRes.data);
+      } catch (err) {
+        console.error("Failed to fetch dashboard/transaction data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, [user?.id, formattedMonth, dataVersion]); // dataVersion is a dependency
 
   return (
     <div className="dashboard">
@@ -93,14 +129,23 @@ function Dashboard({ user, setIsLoggedIn }) {
         <div className="left-section card">
           <div className="chart-container">
             <h3 className="chart-title">Spending by Category for {months.find(m => m.value === selectedMonth)?.label} {selectedYear}</h3>
-            <PieChartComponent month={formattedMonth} userId={user.id} />
+            <PieChartComponent
+              loading={loading}
+              dashboardData={dashboardData}
+            />
           </div>
         </div>
 
         {/* Right Section - Transaction Table */}
         <div className="right-section card">
           <h3 className="table-title">Transactions for {months.find(m => m.value === selectedMonth)?.label} {selectedYear}</h3>
-          <TransactionTable month={formattedMonth} userId={user.id} />
+          <TransactionTable
+            loading={loading}
+            transactions={transactions}
+            onDataChange={handleDataChange}
+            month={formattedMonth}
+            userId={user.id}
+          />
         </div>
       </main>
     </div>

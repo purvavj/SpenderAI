@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react'; // useEffect is no longer needed here
 import axios from 'axios';
 import '../styles/TransactionTable.css';
 
-function TransactionTable({ month, userId }) {
-  const [transactions, setTransactions] = useState([]);
+// The component now receives its data and a refresh function via props
+function TransactionTable({ transactions, onDataChange, month, userId, loading, error, setError }) {
+  // This local state is for managing the UI (forms, editing state), which is correct.
   const [newTransaction, setNewTransaction] = useState({
     name: '',
     amount: '',
     category: 'Others',
     date: new Date().toISOString().split('T')[0]
   });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({
@@ -24,29 +22,10 @@ function TransactionTable({ month, userId }) {
 
   const categories = ['Shopping', 'Bills', 'Eating Out', 'Others'];
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
-        );
-        setTransactions(response.data);
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-        setError('Failed to fetch transactions');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTransactions();
-  }, [month, userId]);
+  // The useEffect for fetching data has been REMOVED from this component.
 
   const handleAddTransaction = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
     try {
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}`,
@@ -57,10 +36,9 @@ function TransactionTable({ month, userId }) {
           date: newTransaction.date
         }
       );
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
-      );
-      setTransactions(response.data);
+      // Instead of re-fetching, just notify the parent component.
+      onDataChange();
+      // Reset the form
       setNewTransaction({
         name: '',
         amount: '',
@@ -69,9 +47,7 @@ function TransactionTable({ month, userId }) {
       });
     } catch (error) {
       console.error('Error adding transaction:', error);
-      setError('Failed to add transaction');
-    } finally {
-      setLoading(false);
+      // Optionally set an error state managed by the parent
     }
   };
 
@@ -86,8 +62,6 @@ function TransactionTable({ month, userId }) {
   };
 
   const handleSaveEdit = async (id) => {
-    setLoading(true);
-    setError(null);
     try {
       const payload = {
         ...editData,
@@ -97,19 +71,14 @@ function TransactionTable({ month, userId }) {
         `${import.meta.env.VITE_API_URL}/api/transactions/${id}?user_id=${userId}`,
         payload
       );
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/transactions?user_id=${userId}&month=${month}`
-      );
-      setTransactions(response.data);
+      // Instead of re-fetching, just notify the parent component.
+      onDataChange();
       setEditingId(null);
     } catch (error) {
       console.error('Error updating transaction:', error);
       if (error.response) {
         console.error('Backend validation errors:', error.response.data);
       }
-      setError('Failed to update transaction');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -117,28 +86,25 @@ function TransactionTable({ month, userId }) {
     setEditingId(null);
   };
 
-  // --- NEW: Function to handle deleting a transaction ---
   const handleDeleteTransaction = async (id) => {
-    // Ask for confirmation before deleting
     if (!window.confirm('Are you sure you want to delete this transaction?')) {
       return;
     }
-
     try {
       await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/transactions/${id}?user_id=${userId}`
       );
-
-      // Update the state to remove the transaction instantly from the UI
-      setTransactions(transactions.filter(t => t.id !== id));
+      // Instead of filtering local state, just notify the parent component.
+      onDataChange();
     } catch (error) {
       console.error('Error deleting transaction:', error);
-      setError('Failed to delete transaction');
     }
   };
 
+  // This calculation now correctly uses the `transactions` prop.
   const totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
 
+  // These checks now use the `loading` and `error` props from the parent.
   if (loading) {
     return <div className="table-wrapper">Loading transactions...</div>;
   }
@@ -147,15 +113,15 @@ function TransactionTable({ month, userId }) {
     return <div className="table-wrapper">{error}</div>;
   }
 
+  // The JSX remains the same, as it now reads from the `transactions` prop.
   return (
     <div className="table-wrapper">
       <form onSubmit={handleAddTransaction} className="add-transaction-form">
-        {/* ... form inputs are unchanged ... */}
         <input
           type="text"
           placeholder="Transaction name"
           value={newTransaction.name}
-          onChange={(e) => setNewTransaction({...newTransaction, name: e.target.value})}
+          onChange={(e) => setNewTransaction({ ...newTransaction, name: e.target.value })}
           required
         />
         <input
@@ -163,12 +129,12 @@ function TransactionTable({ month, userId }) {
           step="0.01"
           placeholder="Amount"
           value={newTransaction.amount}
-          onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
+          onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
           required
         />
         <select
           value={newTransaction.category}
-          onChange={(e) => setNewTransaction({...newTransaction, category: e.target.value})}
+          onChange={(e) => setNewTransaction({ ...newTransaction, category: e.target.value })}
         >
           {categories.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
@@ -177,7 +143,7 @@ function TransactionTable({ month, userId }) {
         <input
           type="date"
           value={newTransaction.date}
-          onChange={(e) => setNewTransaction({...newTransaction, date: e.target.value})}
+          onChange={(e) => setNewTransaction({ ...newTransaction, date: e.target.value })}
           required
         />
         <button type="submit">Add</button>
@@ -190,13 +156,12 @@ function TransactionTable({ month, userId }) {
             <th>Date</th>
             <th>Category</th>
             <th>Amount</th>
-            <th>Actions</th> {/* --- CHANGED: Renamed column header --- */}
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {transactions.map(transaction =>
             editingId === transaction.id ? (
-              // The editing row is unchanged
               <tr key={transaction.id}>
                 <td>
                   <input type="text" value={editData.name} onChange={e => setEditData({ ...editData, name: e.target.value })} />
@@ -218,7 +183,6 @@ function TransactionTable({ month, userId }) {
                 </td>
               </tr>
             ) : (
-              // --- CHANGED: The display row now has a delete button ---
               <tr key={transaction.id} onDoubleClick={() => handleRowDoubleClick(transaction)}>
                 <td>{transaction.name}</td>
                 <td>{transaction.date}</td>
@@ -244,7 +208,7 @@ function TransactionTable({ month, userId }) {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan="4"><strong>Total</strong></td> {/* --- CHANGED: colSpan updated --- */}
+            <td colSpan="4"><strong>Total</strong></td>
             <td><strong>${totalSpent.toFixed(2)}</strong></td>
           </tr>
         </tfoot>

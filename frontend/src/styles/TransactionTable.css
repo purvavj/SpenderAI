@@ -51,7 +51,6 @@
   filter: brightness(0.95);
 }
 
-/* Wrapper to enable scrolling for the table body */
 .table-wrapper {
   flex: 1; 
   overflow-y: auto; 
@@ -104,6 +103,7 @@ tbody tr:hover {
 
 /* Table Footer */
 tfoot td {
+  position: sticky;
   padding: 12px 10px;
   font-weight: 700;
   border-top: 3px solid rgba(240, 137, 46, 0.637);

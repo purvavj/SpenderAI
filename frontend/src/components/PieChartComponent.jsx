@@ -1,47 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react'; // useEffect and axios are no longer needed here
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import '../styles/PieChart.css';
 
 const COLORS = ['#ff9292ff', '#e6a157', '#f0e1d4ff', '#8751abff', '#0d97baa7'];
 
+// This helper function can remain as it is
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, percent, index }) => {
   return null;
 };
 
-export default function PieChartComponent({ month, userId }) {
-  const [loading, setLoading] = useState(true);
-  const [breakdown, setBreakdown] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(null); // hovered slice
+// The component now receives its data via props
+export default function PieChartComponent({ dashboardData, loading }) {
+  // Local state for UI interactions (like hovering) is perfectly fine here.
+  const [activeIndex, setActiveIndex] = useState(null);
 
-  useEffect(() => {
-    if (!userId || !month) return;
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/dashboard`, {
-          params: { user_id: userId, month }
-        });
-        const arr = Array.isArray(data?.category_breakdown) ? data.category_breakdown : [];
-        setBreakdown(arr);
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        setBreakdown([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [month, userId]);
+  // The useEffect for fetching data has been REMOVED.
 
-  if (loading) return <div className="pie-chart-placeholder">Loading chart data...</div>;
+  // The component now uses the `loading` prop from the parent.
+  if (loading) {
+    return <div className="pie-chart-placeholder">Loading chart data...</div>;
+  }
 
+  // It now safely unwraps the `dashboardData` prop.
+  const breakdown = Array.isArray(dashboardData?.category_breakdown) ? dashboardData.category_breakdown : [];
+  
+  // This logic remains the same but now operates on the derived `breakdown` variable.
   const safe = breakdown.filter(item => (item?.amount ?? 0) > 0);
-  if (safe.length === 0) return <div className="pie-chart-placeholder">No spending data for this month</div>;
+  if (safe.length === 0) {
+    return <div className="pie-chart-placeholder">No spending data for this month</div>;
+  }
 
   const chartData = safe.map(item => ({ name: item.category || 'Other', value: item.amount }));
   const total = chartData.reduce((sum, e) => sum + (e.value || 0), 0);
 
+  // The entire JSX rendering part remains unchanged.
   return (
     <div className="chart-container" style={{ width: '100%', height: '340px', position: 'relative' }}>
       <ResponsiveContainer>
