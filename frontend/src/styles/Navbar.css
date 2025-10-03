@@ -3,7 +3,7 @@
   top: 0;
   z-index: 100;
   height: 64px;
-  background: #ffffff39;
+  background: rgba(255, 255, 255, 0.44);
   box-shadow: var(--card-shadow);
   padding: 0 50px;
   display: flex;

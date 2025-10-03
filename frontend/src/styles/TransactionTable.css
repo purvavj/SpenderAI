@@ -1,4 +1,3 @@
-/* Main container with the semi-transparent "frosted glass" effect */
 .table-container {
   border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border to define the edge */
   border-radius: var(--border-radius);
